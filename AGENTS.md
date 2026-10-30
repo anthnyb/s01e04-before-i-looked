@@ -16,7 +16,22 @@ Read first: `docs/vision.md`, `docs/styleguide.md`. Decisions: `docs/adr/`.
    `docs/plans/done/`.
 2. The plan is split into GitHub issues: skill `plan-to-issues` (`.agents/skills/`). A human
    reviews the split before anything is published. GitHub issues out of reach: files in
-   `docs/issues/` (ADR 0004).
+   `docs/issues/` (ADR 0004). Every issue carries this shape, with the label
+   `plan:<plan>` (the `plan:` value in the plan's frontmatter):
+
+   ```
+   Source: plan.md § <n>
+
+   ## Scope
+   <what this issue changes, and what it leaves to other issues>
+
+   ## Done when
+   <the plan section's check, word for word where it has one>
+
+   ## Blocked by
+   <#n it needs to start; #n its done-when also needs; or —>
+   ```
+
 3. Issues are worked by workers, one issue per worker, each on its own branch or worktree.
    Pick the model per issue: the strongest for logic, a cheaper one for views and tests.
 4. A worker closes its issue with a closing comment, exactly this shape:
