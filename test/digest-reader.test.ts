@@ -24,6 +24,7 @@ describe('readNight', () => {
       owner: 'rook',
       runs: 4,
       retries: 3,
+      fails: 0,
       lastStatus: 'ok',
       lastError: 'upstream 503',
       first: '2026-10-29T01:30:00+01:00',

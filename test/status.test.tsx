@@ -13,6 +13,13 @@ describe('status board', () => {
     expect(html).toContain('2026-10-28');
   });
 
+  it('links each night to its digest with line counts', async () => {
+    const html = await (await createApp(config).request('/')).text();
+    expect(html).toMatch(/<a href="\/digest\/2026-10-28">2026-10-28<\/a>\s*ok 10 · retry 4 · fail 1/);
+    expect(html).toMatch(/<a href="\/digest\/2026-10-27">2026-10-27<\/a>\s*ok 7 · retry 0 · fail 0/);
+    expect(html.indexOf('2026-10-28')).toBeLessThan(html.indexOf('2026-10-27'));
+  });
+
   it('digest renders 2026-10-28 and 404s a missing night', async () => {
     const ok = await createApp(config).request('/digest/2026-10-28');
     expect(ok.status).toBe(200);
