@@ -18,3 +18,23 @@ describe('status board', () => {
     expect(await res.json()).toEqual({ ok: true, lane: 'lane-07' });
   });
 });
+
+describe('digest json', () => {
+  it('serves the night as the reader returns it', async () => {
+    const { readNight } = await import('../src/digest/reader.js');
+    const res = await createApp(config).request('/api/digest/2026-10-28');
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body).toEqual(readNight('runs', '2026-10-28'));
+    expect(body.rows.map((r: { job: string }) => r.job)).toEqual([
+      'digest/render', 'fixtures/refresh', 'lane/sync', 'notes/backup', 'rig/rotate-logs',
+    ]);
+    expect(body.badLines).toBe(1);
+  });
+
+  it('404s for a night with no file', async () => {
+    const res = await createApp(config).request('/api/digest/1999-01-01');
+    expect(res.status).toBe(404);
+    expect(await res.json()).toEqual({ error: 'no run log for 1999-01-01' });
+  });
+});
