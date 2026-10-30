@@ -13,6 +13,15 @@ describe('status board', () => {
     expect(html).toContain('2026-10-28');
   });
 
+  it('digest renders 2026-10-28 and 404s a missing night', async () => {
+    const ok = await createApp(config).request('/digest/2026-10-28');
+    expect(ok.status).toBe(200);
+    expect(await ok.text()).toContain('<th>last status</th>');
+    const missing = await createApp(config).request('/digest/1999-01-01');
+    expect(missing.status).toBe(404);
+    expect(await missing.text()).toContain('no run log for 1999-01-01');
+  });
+
   it('health answers with the lane id', async () => {
     const res = await createApp(config).request('/health');
     expect(await res.json()).toEqual({ ok: true, lane: 'lane-07' });
